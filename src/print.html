@@ -2,7 +2,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:">
+<title>Invoice</title>
 <style>
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body { font-family: 'Segoe UI', sans-serif; color: #1a1917; padding: 40px; font-size: 13px; margin: 0; }
   .p-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
   .p-company { font-size: 18px; font-weight: 700; }
