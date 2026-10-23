@@ -206,6 +206,7 @@
   }
   .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
   .field textarea { resize: vertical; min-height: 60px; }
+  .field input.invalid { border-color: var(--danger); background: var(--danger-light); }
 
   /* Items table */
   .items-tbl { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
@@ -765,13 +766,19 @@ function setStatusBadge(s) {
 
 function setInvoiceStatus(s) {
   setStatusBadge(s);
-  saveInvoice(true);
+  if (!saveInvoice(true)) return;
   toast(s === 'paid' ? 'Marked as paid!' : s === 'sent' ? 'Marked as sent' : 'Saved as draft', s === 'paid' ? 'green' : '');
 }
 
 function getStatus() { return document.getElementById('editorStatusBadge').dataset.status || 'draft'; }
 
 function saveInvoice(silent = false) {
+  const issue = document.getElementById('fIssueDate').value;
+  const due = document.getElementById('fDueDate');
+  const badDates = issue && due.value && due.value < issue;
+  due.classList.toggle('invalid', !!badDates);
+  if (badDates) { toast('Due date is before the issue date', 'red'); return false; }
+
   const { subtotal, discountAmt, taxAmt, total } = computeTotals();
   const inv = {
     id: currentId,
@@ -804,6 +811,7 @@ function saveInvoice(silent = false) {
   updateSidebarCount();
   setDirty(false);
   if (!silent) toast('Invoice saved!', 'green');
+  return true;
 }
 
 function duplicateInvoice() {
@@ -957,7 +965,7 @@ function renderPreview() {
 // PDF Export
 // ─────────────────────────────────────────
 async function exportPdf() {
-  saveInvoice(true);
+  if (!saveInvoice(true)) return;
   const invNum = document.getElementById('fInvNum').value || 'invoice';
 
   if (window.api) {
