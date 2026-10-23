@@ -688,6 +688,9 @@ function showView(name) {
   if (name === 'dashboard') renderDashboard();
   if (name === 'invoices') renderList();
   if (name === 'clients') renderClients();
+
+  const titles = { dashboard: 'Dashboard', invoices: 'Invoices', clients: 'Clients', editor: document.getElementById('editorTitle').textContent };
+  document.title = `${titles[name] || ''} · InvoiceDesk`;
   return true;
 }
 
