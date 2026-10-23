@@ -553,11 +553,12 @@ async function loadData() {
 async function persist() {
   try {
     if (window.api) {
-      await window.api.saveInvoices(invoices);
+      const res = await window.api.saveInvoices(invoices);
+      if (res && !res.ok) toast('Could not save to disk', 'red');
     } else {
       localStorage.setItem('invoices', JSON.stringify(invoices));
     }
-  } catch(e) {}
+  } catch(e) { toast('Could not save to disk', 'red'); }
 }
 
 // ─────────────────────────────────────────
