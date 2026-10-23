@@ -604,7 +604,7 @@ let pendingDeleteId = null;
 let dirty = false;
 let listSort = { key: null, dir: 1 };
 
-const fmt = d => new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+const fmt = d => new Date(/^\d{4}-\d{2}-\d{2}$/.test(d) ? d + 'T00:00' : d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 const money = (sym, n) => sym + (Number(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 // local yyyy-mm-dd, toISOString would give the utc date
 const isoDate = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
