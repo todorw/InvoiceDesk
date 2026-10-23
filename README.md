@@ -10,11 +10,26 @@ A clean, fast desktop invoice generator for freelancers. Built with Electron.
 - Live invoice preview as you type
 - Line items with qty, rate, auto totals
 - Tax & discount support
-- Multi-currency (USD, EUR, GBP, CAD, AUD)
-- Invoice status tracking (Draft → Sent → Paid)
+- Multi-currency (USD, EUR, GBP, CAD, AUD, CHF, JPY, RSD)
+- Invoice status tracking (Draft → Sent → Paid), overdue detection
+- Duplicate invoices, sender details remembered between invoices
 - Client directory built automatically
 - Dashboard with revenue stats
-- Search & filter invoices
+- Search, filter & sort invoices
+- JSON backup of all your data
+- Dark mode (follows your system theme)
+
+---
+
+## Keyboard shortcuts
+| Shortcut | Action |
+|---|---|
+| `Ctrl/Cmd + N` | New invoice |
+| `Ctrl/Cmd + S` | Save invoice |
+| `Ctrl/Cmd + P` | Export PDF |
+| `Ctrl/Cmd + F` | Search invoices |
+| `Enter` (last line item) | Add a line item |
+| `Esc` | Back / close dialog |
 
 ---
 
