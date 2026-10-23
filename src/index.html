@@ -679,7 +679,7 @@ function newInvoice() {
   document.getElementById('fNotes').value = 'Payment is due within 14 days. Thank you for your business!';
 
   setStatusBadge('draft');
-  document.getElementById('editorTitle').textContent = genNumber();
+  document.getElementById('editorTitle').textContent = document.getElementById('fInvNum').value;
   renderItems();
   renderTotals();
   renderPreview();
