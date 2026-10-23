@@ -351,6 +351,7 @@
           <button class="filter-tab active" onclick="setFilter(this,'all')">All</button>
           <button class="filter-tab" onclick="setFilter(this,'draft')">Draft</button>
           <button class="filter-tab" onclick="setFilter(this,'sent')">Sent</button>
+          <button class="filter-tab" onclick="setFilter(this,'overdue')">Overdue</button>
           <button class="filter-tab" onclick="setFilter(this,'paid')">Paid</button>
         </div>
       </div>
@@ -640,7 +641,7 @@ function setFilter(el, f) {
 function renderList() {
   const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
   let list = invoices.filter(i => {
-    const matchFilter = listFilter === 'all' || i.status === listFilter;
+    const matchFilter = listFilter === 'all' || effectiveStatus(i) === listFilter;
     const matchSearch = !q || i.number?.toLowerCase().includes(q) || i.toName?.toLowerCase().includes(q);
     return matchFilter && matchSearch;
   }).sort((a,b) => new Date(b.updatedAt||0) - new Date(a.updatedAt||0));
