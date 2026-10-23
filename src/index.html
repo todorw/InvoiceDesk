@@ -172,6 +172,12 @@
     box-shadow: var(--shadow-sm); cursor: pointer;
     transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), border-color 0.2s;
   }
+  .client-avatar {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent-light), var(--blue-light));
+    color: var(--accent-text); font-weight: 700; font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+  }
   .client-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: var(--border2); }
   .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; }
   .table-card > p { padding: 20px; }
@@ -1092,7 +1098,7 @@ function renderClients() {
     ? '<p style="color:var(--text2)">No clients yet. Save an invoice with a client name to see them here.</p>'
     : list.map(c => `
       <div class="client-card" onclick="showClientInvoices(this.dataset.name)" data-name="${escHtml(c.name)}">
-        <div style="width:40px;height:40px;border-radius:50%;background:var(--accent-light);color:var(--accent-text);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0">${c.name.charAt(0).toUpperCase()}</div>
+        <div class="client-avatar">${escHtml(c.name.charAt(0).toUpperCase())}</div>
         <div style="flex:1">
           <div style="font-weight:600;font-size:14px">${escHtml(c.name)}</div>
           <div style="font-size:12px;color:var(--text2)">${escHtml(c.email||'')} · ${c.invoices.length} invoice${c.invoices.length!==1?'s':''}</div>
