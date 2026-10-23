@@ -23,6 +23,13 @@ function createWindow() {
   });
 
   mainWindow.once('ready-to-show', () => mainWindow.show());
+
+  // never open new electron windows or navigate away, send links to the browser
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:\/\//.test(url)) shell.openExternal(url);
+    return { action: 'deny' };
+  });
+  mainWindow.webContents.on('will-navigate', e => e.preventDefault());
   mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
 }
 
