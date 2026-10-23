@@ -697,10 +697,10 @@ function newInvoice() {
   document.getElementById('fToEmail').value = '';
   document.getElementById('fToAddr').value = '';
   document.getElementById('fInvNum').value = genNumber();
-  document.getElementById('fCurrency').value = '$';
+  document.getElementById('fCurrency').value = last?.currency || '$';
   document.getElementById('fIssueDate').value = today();
   document.getElementById('fDueDate').value = dueDefault();
-  document.getElementById('fTax').value = '10';
+  document.getElementById('fTax').value = last?.taxRate ?? 10;
   document.getElementById('fDiscount').value = '0';
   document.getElementById('fNotes').value = 'Payment is due within 14 days. Thank you for your business!';
 
