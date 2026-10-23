@@ -56,7 +56,7 @@ ipcMain.handle('save-invoices', (_, data) => {
 });
 
 // ── IPC: Export PDF via Chromium print ─────────────────────────────────────
-ipcMain.handle('export-pdf', async (_, invoiceId) => {
+ipcMain.handle('export-pdf', async (_, invoiceId, html) => {
   const { filePath } = await dialog.showSaveDialog(mainWindow, {
     defaultPath: `${invoiceId}.pdf`,
     filters: [{ name: 'PDF', extensions: ['pdf'] }],
@@ -71,19 +71,7 @@ ipcMain.handle('export-pdf', async (_, invoiceId) => {
 
   await printWin.loadFile(path.join(__dirname, 'src', 'print.html'));
   await printWin.webContents.executeJavaScript(
-    `window.__invoiceId = ${JSON.stringify(invoiceId)};`
-  );
-
-  // Signal renderer to inject invoice data
-  mainWindow.webContents.send('inject-print-data', invoiceId);
-
-  // Wait for renderer to post data back
-  const data = await new Promise(resolve => {
-    ipcMain.once('print-data-ready', (_, d) => resolve(d));
-  });
-
-  await printWin.webContents.executeJavaScript(
-    `document.getElementById('root').innerHTML = ${JSON.stringify(data)};`
+    `document.getElementById('root').innerHTML = ${JSON.stringify(String(html || ''))};`
   );
 
   const pdfBuffer = await printWin.webContents.printToPDF({

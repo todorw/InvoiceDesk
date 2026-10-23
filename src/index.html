@@ -902,12 +902,8 @@ async function exportPdf() {
   const invNum = document.getElementById('fInvNum').value || 'invoice';
 
   if (window.api) {
-    // Register handler for print data request
-    window.api.onInjectPrintData((id) => {
-      const html = document.getElementById('invoicePreview').innerHTML;
-      window.api.sendPrintData(html);
-    });
-    const result = await window.api.exportPdf(invNum);
+    const html = document.getElementById('invoicePreview').innerHTML;
+    const result = await window.api.exportPdf(invNum, html);
     if (result.ok) toast('PDF saved!', 'green');
     else if (result.error) toast('PDF export failed', 'red');
   } else {
