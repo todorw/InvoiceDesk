@@ -803,6 +803,7 @@ function setStatusBadge(s) {
   b.className = 'status-pill status-' + s;
   b.textContent = s.charAt(0).toUpperCase() + s.slice(1);
   b.dataset.status = s;
+  renderPreview();
 }
 
 function setInvoiceStatus(s) {
@@ -970,7 +971,7 @@ function renderPreview() {
         ${fromEmail ? `<div class="p-company-sub">${escHtml(fromEmail)}</div>` : ''}
         ${fromAddr ? `<div class="p-company-sub">${escHtml(fromAddr)}</div>` : ''}
       </div>
-      <div class="p-tag">INVOICE</div>
+      <div class="p-tag" ${getStatus() === 'paid' ? 'style="background:#0F6E56"' : ''}>${getStatus() === 'paid' ? 'PAID' : 'INVOICE'}</div>
     </div>
     <div class="p-meta">
       <div>
