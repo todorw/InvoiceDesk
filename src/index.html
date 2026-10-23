@@ -1093,7 +1093,7 @@ function renderClients() {
     clients[inv.toName].invoices.push(inv);
     clients[inv.toName].total += inv.total || 0;
   });
-  const list = Object.values(clients);
+  const list = Object.values(clients).sort((a,b) => b.total - a.total);
   document.getElementById('clientsContent').innerHTML = list.length === 0
     ? '<p style="color:var(--text2)">No clients yet. Save an invoice with a client name to see them here.</p>'
     : list.map(c => `
