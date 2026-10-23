@@ -48,8 +48,8 @@ npm install
 # 2. Build Windows installer (.exe)
 npm run build:win
 
-# Output will be in:  dist/InvoiceDesk Setup 1.0.0.exe  (installer)
-#                     dist/InvoiceDesk 1.0.0.exe         (portable, no install needed)
+# Output will be in:  dist/InvoiceDesk Setup 1.1.0.exe  (installer)
+#                     dist/InvoiceDesk 1.1.0.exe         (portable, no install needed)
 ```
 
 ### Build for other platforms
