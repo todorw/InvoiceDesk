@@ -40,9 +40,13 @@ const dataPath = () => path.join(app.getPath('userData'), 'invoices.json');
 ipcMain.handle('load-invoices', () => {
   try {
     if (fs.existsSync(dataPath())) {
-      return JSON.parse(fs.readFileSync(dataPath(), 'utf8'));
+      const parsed = JSON.parse(fs.readFileSync(dataPath(), 'utf8'));
+      return Array.isArray(parsed) ? parsed : [];
     }
-  } catch (e) {}
+  } catch (e) {
+    // keep a copy of the broken file instead of overwriting it on next save
+    try { fs.copyFileSync(dataPath(), dataPath() + `.broken-${Date.now()}`); } catch (_) {}
+  }
   return [];
 });
 
