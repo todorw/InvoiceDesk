@@ -352,7 +352,7 @@
     <div class="view" id="view-invoices">
       <div class="inv-list-header">
         <h1>Invoices</h1>
-        <input class="search-box" placeholder="Search invoices..." id="searchInput" oninput="renderList()">
+        <input class="search-box" placeholder="Search number, client, email..." id="searchInput" oninput="renderList()">
         <div class="filter-tabs">
           <button class="filter-tab active" onclick="setFilter(this,'all')">All</button>
           <button class="filter-tab" onclick="setFilter(this,'draft')">Draft</button>
@@ -649,7 +649,7 @@ function renderList() {
   const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
   let list = invoices.filter(i => {
     const matchFilter = listFilter === 'all' || effectiveStatus(i) === listFilter;
-    const matchSearch = !q || i.number?.toLowerCase().includes(q) || i.toName?.toLowerCase().includes(q);
+    const matchSearch = !q || [i.number, i.toName, i.toEmail].some(f => f?.toLowerCase().includes(q));
     return matchFilter && matchSearch;
   }).sort((a,b) => new Date(b.updatedAt||0) - new Date(a.updatedAt||0));
 
