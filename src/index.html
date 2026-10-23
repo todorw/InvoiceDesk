@@ -305,7 +305,7 @@
       </div>
     </div>
     <div class="sidebar-footer">
-      <button class="btn-new" onclick="newInvoice()">
+      <button class="btn-new" onclick="newInvoice()" title="New invoice (Ctrl+N)">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
         New Invoice
       </button>
@@ -379,7 +379,7 @@
     <!-- Editor view -->
     <div class="view" id="view-editor">
       <div class="editor-topbar">
-        <button class="btn-back" onclick="backToList()">← Back</button>
+        <button class="btn-back" onclick="backToList()" title="Back (Esc)">← Back</button>
         <span class="editor-topbar-title" id="editorTitle">New Invoice</span>
         <span class="unsaved-dot" id="unsavedDot" title="Unsaved changes"></span>
         <span id="editorStatusBadge" class="status-pill status-draft">Draft</span>
@@ -387,11 +387,11 @@
           <button class="btn" onclick="setInvoiceStatus('draft')">Draft</button>
           <button class="btn" onclick="setInvoiceStatus('sent')">Mark Sent</button>
           <button class="btn" onclick="setInvoiceStatus('paid')">Mark Paid</button>
-          <button class="btn" onclick="exportPdf()">
+          <button class="btn" onclick="exportPdf()" title="Export PDF (Ctrl+P)">
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v8M3.5 6l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1 10.5h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
             Export PDF
           </button>
-          <button class="btn btn-accent" onclick="saveInvoice()">
+          <button class="btn btn-accent" onclick="saveInvoice()" title="Save (Ctrl+S)">
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 7l3.5 3.5L11 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
             Save
           </button>
