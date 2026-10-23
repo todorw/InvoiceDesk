@@ -411,7 +411,7 @@
           <div class="form-card">
             <div class="form-card-title">Invoice Details</div>
             <div class="field-row">
-              <div class="field"><label>Invoice number</label><input id="fInvNum" oninput="renderPreview()"></div>
+              <div class="field"><label>Invoice number</label><input id="fInvNum" oninput="document.getElementById('editorTitle').textContent=this.value||'Invoice';renderPreview()"></div>
               <div class="field"><label>Currency</label>
                 <select id="fCurrency" onchange="renderPreview()">
                   <option value="$">USD ($)</option>
