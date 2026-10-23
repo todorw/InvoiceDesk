@@ -296,8 +296,11 @@
 
   /* ── Confirm dialog ── */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); display: none; align-items: center; justify-content: center; z-index: 100; }
-  .modal-overlay.show { display: flex; }
-  .modal { background: var(--surface); border-radius: var(--radius-lg); padding: 24px; max-width: 360px; width: 90%; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+  .modal-overlay.show { display: flex; animation: fadeIn 0.15s ease-out; backdrop-filter: blur(3px); }
+  .modal { background: var(--surface); border-radius: var(--radius-lg); padding: 24px; max-width: 360px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+  .modal-overlay.show .modal { animation: modalIn 0.22s var(--ease); }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(6px); } to { opacity: 1; transform: none; } }
   .modal h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
   .modal p { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
   .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
