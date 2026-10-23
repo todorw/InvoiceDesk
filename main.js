@@ -18,6 +18,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
+      sandbox: true,
     },
     icon: path.join(__dirname, 'assets', 'icon.png'),
   });
@@ -83,7 +84,7 @@ ipcMain.handle('export-pdf', async (_, invoiceId, html) => {
   // Open a hidden print window with just the invoice
   const printWin = new BrowserWindow({
     show: false,
-    webPreferences: { contextIsolation: true },
+    webPreferences: { contextIsolation: true, sandbox: true },
   });
 
   try {
