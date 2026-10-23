@@ -140,6 +140,8 @@
   .stat-value.blue { color: var(--blue); }
   .stat-value.red { color: var(--danger); }
 
+  .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; }
+  .table-card > p { padding: 20px; }
   .section-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.4px; }
 
   /* ── Invoice list ── */
@@ -383,7 +385,7 @@
           </div>
         </div>
         <div class="section-title">Recent Invoices</div>
-        <div id="recentList"></div>
+        <div id="recentList" class="table-card"></div>
       </div>
     </div>
 
