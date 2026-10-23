@@ -166,6 +166,13 @@
   .stat-value.blue { color: var(--blue); }
   .stat-value.red { color: var(--danger); }
 
+  .client-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 16px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px;
+    box-shadow: var(--shadow-sm); cursor: pointer;
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), border-color 0.2s;
+  }
+  .client-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: var(--border2); }
   .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; }
   .table-card > p { padding: 20px; }
   .section-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.4px; }
@@ -1084,7 +1091,7 @@ function renderClients() {
   document.getElementById('clientsContent').innerHTML = list.length === 0
     ? '<p style="color:var(--text2)">No clients yet. Save an invoice with a client name to see them here.</p>'
     : list.map(c => `
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px">
+      <div class="client-card" onclick="showClientInvoices(this.dataset.name)" data-name="${escHtml(c.name)}">
         <div style="width:40px;height:40px;border-radius:50%;background:var(--accent-light);color:var(--accent-text);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0">${c.name.charAt(0).toUpperCase()}</div>
         <div style="flex:1">
           <div style="font-weight:600;font-size:14px">${escHtml(c.name)}</div>
@@ -1095,6 +1102,12 @@ function renderClients() {
           <div style="font-size:11px;color:var(--text3)">lifetime</div>
         </div>
       </div>`).join('');
+}
+
+function showClientInvoices(name) {
+  if (!showView('invoices')) return;
+  document.getElementById('searchInput').value = name;
+  renderList();
 }
 
 // ─────────────────────────────────────────
