@@ -116,6 +116,11 @@
     transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
   }
   .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--border2); }
+  .stat-card:has(.green)::before { background: var(--accent); }
+  .stat-card:has(.amber)::before { background: var(--amber); }
+  .stat-card:has(.blue)::before { background: var(--blue); }
+  .stat-card:has(.red)::before { background: var(--danger); }
   .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
   .stat-value { font-size: 22px; font-weight: 700; }
   .stat-value.green { color: var(--accent); }
