@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell, nativeTheme } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -11,7 +11,7 @@ function createWindow() {
     minWidth: 900,
     minHeight: 600,
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
-    backgroundColor: '#f8f7f4',
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#141413' : '#f8f7f4',
     autoHideMenuBar: true,
     show: false,
     webPreferences: {
