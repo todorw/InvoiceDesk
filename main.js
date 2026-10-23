@@ -69,19 +69,24 @@ ipcMain.handle('export-pdf', async (_, invoiceId, html) => {
     webPreferences: { contextIsolation: true },
   });
 
-  await printWin.loadFile(path.join(__dirname, 'src', 'print.html'));
-  await printWin.webContents.executeJavaScript(
-    `document.getElementById('root').innerHTML = ${JSON.stringify(String(html || ''))};`
-  );
+  try {
+    await printWin.loadFile(path.join(__dirname, 'src', 'print.html'));
+    await printWin.webContents.executeJavaScript(
+      `document.getElementById('root').innerHTML = ${JSON.stringify(String(html || ''))};`
+    );
 
-  const pdfBuffer = await printWin.webContents.printToPDF({
-    printBackground: true,
-    pageSize: 'A4',
-    margins: { top: 0.4, bottom: 0.4, left: 0.5, right: 0.5 },
-  });
+    const pdfBuffer = await printWin.webContents.printToPDF({
+      printBackground: true,
+      pageSize: 'A4',
+      margins: { top: 0.4, bottom: 0.4, left: 0.5, right: 0.5 },
+    });
 
-  fs.writeFileSync(filePath, pdfBuffer);
-  printWin.close();
-  shell.openPath(filePath);
-  return { ok: true, path: filePath };
+    fs.writeFileSync(filePath, pdfBuffer);
+    shell.openPath(filePath);
+    return { ok: true, path: filePath };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  } finally {
+    if (!printWin.isDestroyed()) printWin.close();
+  }
 });
