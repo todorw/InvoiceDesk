@@ -13,6 +13,7 @@ function createWindow() {
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
     backgroundColor: '#f8f7f4',
     autoHideMenuBar: true,
+    show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -21,6 +22,7 @@ function createWindow() {
     icon: path.join(__dirname, 'assets', 'icon.png'),
   });
 
+  mainWindow.once('ready-to-show', () => mainWindow.show());
   mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
 }
 
