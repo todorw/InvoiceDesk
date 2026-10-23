@@ -1038,6 +1038,16 @@ function toast(msg, type = '') {
 // ─────────────────────────────────────────
 document.getElementById('view-editor').addEventListener('input', () => setDirty(true));
 
+// enter on the last line item adds a new one
+document.getElementById('itemsBody').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' || e.target.tagName !== 'INPUT') return;
+  const rows = [...document.querySelectorAll('#itemsBody tr')];
+  if (e.target.closest('tr') !== rows[rows.length - 1]) return;
+  e.preventDefault();
+  addItem();
+  document.querySelector('#itemsBody tr:last-child input')?.focus();
+});
+
 // ─────────────────────────────────────────
 // Keyboard shortcuts
 // ─────────────────────────────────────────
