@@ -658,6 +658,9 @@ function renderList() {
 
   if (list.length === 0) {
     tbody.innerHTML = '';
+    const filtered = invoices.length > 0;
+    empty.querySelector('h3').textContent = filtered ? 'No matching invoices' : 'No invoices yet';
+    empty.querySelector('p').textContent = filtered ? 'Try a different search or filter' : 'Click "New Invoice" to create your first one';
     empty.style.display = 'block';
   } else {
     empty.style.display = 'none';
