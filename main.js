@@ -48,7 +48,10 @@ ipcMain.handle('load-invoices', () => {
 
 ipcMain.handle('save-invoices', (_, data) => {
   try {
-    fs.writeFileSync(dataPath(), JSON.stringify(data, null, 2), 'utf8');
+    // write to a temp file first so a crash mid-write can't corrupt the data
+    const tmp = dataPath() + '.tmp';
+    fs.writeFileSync(tmp, JSON.stringify(data, null, 2), 'utf8');
+    fs.renameSync(tmp, dataPath());
     return { ok: true };
   } catch (e) {
     return { ok: false, error: e.message };
