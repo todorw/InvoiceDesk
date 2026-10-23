@@ -743,12 +743,13 @@ function setStatusBadge(s) {
 
 function setInvoiceStatus(s) {
   setStatusBadge(s);
+  saveInvoice(true);
   toast(s === 'paid' ? 'Marked as paid!' : s === 'sent' ? 'Marked as sent' : 'Saved as draft', s === 'paid' ? 'green' : '');
 }
 
 function getStatus() { return document.getElementById('editorStatusBadge').dataset.status || 'draft'; }
 
-function saveInvoice() {
+function saveInvoice(silent = false) {
   const { subtotal, discountAmt, taxAmt, total } = computeTotals();
   const inv = {
     id: currentId,
@@ -779,7 +780,7 @@ function saveInvoice() {
 
   persist();
   updateSidebarCount();
-  toast('Invoice saved!', 'green');
+  if (!silent) toast('Invoice saved!', 'green');
 }
 
 function deleteInvoicePrompt() {
@@ -917,7 +918,7 @@ function renderPreview() {
 // PDF Export
 // ─────────────────────────────────────────
 async function exportPdf() {
-  saveInvoice();
+  saveInvoice(true);
   const invNum = document.getElementById('fInvNum').value || 'invoice';
 
   if (window.api) {
