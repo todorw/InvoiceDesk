@@ -508,8 +508,9 @@ const money = (sym, n) => sym + (Number(n) || 0).toLocaleString('en-US', { minim
 const today = () => new Date().toISOString().split('T')[0];
 const dueDefault = () => { const d = new Date(); d.setDate(d.getDate()+14); return d.toISOString().split('T')[0]; };
 const currency = () => document.getElementById('fCurrency')?.value || '$';
-const taxRate = () => parseFloat(document.getElementById('fTax')?.value) || 0;
-const discountRate = () => parseFloat(document.getElementById('fDiscount')?.value) || 0;
+const clampPct = v => Math.min(100, Math.max(0, parseFloat(v) || 0));
+const taxRate = () => clampPct(document.getElementById('fTax')?.value);
+const discountRate = () => clampPct(document.getElementById('fDiscount')?.value);
 
 function genId() { return 'inv_' + Date.now() + '_' + Math.random().toString(36).slice(2,6); }
 function genNumber() {
