@@ -175,6 +175,7 @@
   }
   .editor-topbar-title { font-size: 15px; font-weight: 700; }
   .topbar-actions { display: flex; gap: 8px; margin-left: auto; }
+  .unsaved-dot { display: none; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); }
 
   .btn { padding: 7px 14px; border-radius: var(--radius); font-size: 13px; cursor: pointer; border: 1px solid var(--border2); background: var(--surface); color: var(--text); font-weight: 500; transition: background 0.1s; display: inline-flex; align-items: center; gap: 6px; }
   .btn:hover { background: var(--surface2); }
@@ -380,6 +381,7 @@
       <div class="editor-topbar">
         <button class="btn-back" onclick="backToList()">← Back</button>
         <span class="editor-topbar-title" id="editorTitle">New Invoice</span>
+        <span class="unsaved-dot" id="unsavedDot" title="Unsaved changes"></span>
         <span id="editorStatusBadge" class="status-pill status-draft">Draft</span>
         <div class="topbar-actions">
           <button class="btn" onclick="setInvoiceStatus('draft')">Draft</button>
@@ -511,6 +513,7 @@ let currentId = null;
 let currentItems = [];
 let listFilter = 'all';
 let pendingDeleteId = null;
+let dirty = false;
 
 const fmt = d => new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 const money = (sym, n) => sym + (Number(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -580,6 +583,10 @@ async function persist() {
 // Views
 // ─────────────────────────────────────────
 function showView(name) {
+  const leavingEditor = name !== 'editor' && document.getElementById('view-editor').classList.contains('active');
+  if (leavingEditor && dirty && !confirm('You have unsaved changes. Leave anyway?')) return false;
+  if (leavingEditor) setDirty(false);
+
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('view-' + name)?.classList.add('active');
@@ -592,10 +599,16 @@ function showView(name) {
   if (name === 'dashboard') renderDashboard();
   if (name === 'invoices') renderList();
   if (name === 'clients') renderClients();
+  return true;
+}
+
+function setDirty(v) {
+  dirty = v;
+  document.getElementById('unsavedDot').style.display = v ? 'inline-block' : 'none';
 }
 
 function backToList() {
-  showView('invoices');
+  if (!showView('invoices')) return;
   currentId = null;
 }
 
@@ -685,6 +698,7 @@ function updateSidebarCount() {
 // Editor
 // ─────────────────────────────────────────
 function newInvoice() {
+  if (dirty && !confirm('You have unsaved changes. Discard them?')) return;
   currentId = genId();
   currentItems = [{ desc: '', qty: 1, rate: 0 }];
 
@@ -710,6 +724,7 @@ function newInvoice() {
   renderTotals();
   renderPreview();
   showView('editor');
+  setDirty(false);
 }
 
 function editInvoice(id) {
@@ -738,6 +753,7 @@ function editInvoice(id) {
   renderTotals();
   renderPreview();
   showView('editor');
+  setDirty(false);
 }
 
 function setStatusBadge(s) {
@@ -786,6 +802,7 @@ function saveInvoice(silent = false) {
 
   persist();
   updateSidebarCount();
+  setDirty(false);
   if (!silent) toast('Invoice saved!', 'green');
 }
 
@@ -798,6 +815,7 @@ function duplicateInvoice() {
   document.getElementById('editorTitle').textContent = document.getElementById('fInvNum').value;
   setStatusBadge('draft');
   renderPreview();
+  setDirty(true);
   toast('Duplicated as new draft');
 }
 
@@ -813,6 +831,7 @@ function confirmDelete() {
   persist();
   updateSidebarCount();
   closeModal();
+  setDirty(false);
   backToList();
   toast('Invoice deleted');
 }
@@ -821,6 +840,7 @@ function confirmDelete() {
 // Line items
 // ─────────────────────────────────────────
 function addItem() {
+  setDirty(true);
   currentItems.push({ desc: '', qty: 1, rate: 0 });
   renderItems();
   renderTotals();
@@ -828,6 +848,7 @@ function addItem() {
 }
 
 function removeItem(i) {
+  setDirty(true);
   currentItems.splice(i, 1);
   renderItems();
   renderTotals();
@@ -1015,6 +1036,8 @@ function toast(msg, type = '') {
 // ─────────────────────────────────────────
 // Init
 // ─────────────────────────────────────────
+document.getElementById('view-editor').addEventListener('input', () => setDirty(true));
+
 loadData();
 </script>
 </body>
