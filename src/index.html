@@ -393,6 +393,7 @@
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 7l3.5 3.5L11 3" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
             Save
           </button>
+          <button class="btn" onclick="duplicateInvoice()" title="Duplicate">Duplicate</button>
           <button class="btn btn-danger" onclick="deleteInvoicePrompt()">Delete</button>
         </div>
       </div>
@@ -784,6 +785,18 @@ function saveInvoice(silent = false) {
   persist();
   updateSidebarCount();
   if (!silent) toast('Invoice saved!', 'green');
+}
+
+function duplicateInvoice() {
+  // keep everything from the form, just give it a fresh id, number and dates
+  currentId = genId();
+  document.getElementById('fInvNum').value = genNumber();
+  document.getElementById('fIssueDate').value = today();
+  document.getElementById('fDueDate').value = dueDefault();
+  document.getElementById('editorTitle').textContent = document.getElementById('fInvNum').value;
+  setStatusBadge('draft');
+  renderPreview();
+  toast('Duplicated as new draft');
 }
 
 function deleteInvoicePrompt() {
