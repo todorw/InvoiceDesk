@@ -607,7 +607,7 @@ function renderDashboard() {
   const paid = invoices.filter(i => i.status === 'paid');
   const outstanding = invoices.filter(i => i.status === 'sent');
   const thisMonth = paid.filter(i => {
-    const d = new Date(i.issueDate);
+    const d = new Date(i.paidAt || i.issueDate);
     const n = new Date();
     return d.getMonth() === n.getMonth() && d.getFullYear() === n.getFullYear();
   });
@@ -772,6 +772,9 @@ function saveInvoice() {
   };
 
   const idx = invoices.findIndex(i => i.id === currentId);
+  const prev = idx >= 0 ? invoices[idx] : null;
+  inv.createdAt = prev?.createdAt || inv.updatedAt;
+  inv.paidAt = inv.status === 'paid' ? (prev?.paidAt || inv.updatedAt) : null;
   if (idx >= 0) invoices[idx] = inv; else invoices.push(inv);
 
   persist();
