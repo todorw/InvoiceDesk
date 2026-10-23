@@ -104,7 +104,7 @@
 
   .dash-content { flex: 1; overflow-y: auto; padding: 20px 24px; }
 
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
   .stat-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-lg); padding: 16px 18px;
@@ -114,6 +114,7 @@
   .stat-value.green { color: var(--accent); }
   .stat-value.amber { color: var(--amber); }
   .stat-value.blue { color: var(--blue); }
+  .stat-value.red { color: var(--danger); }
 
   .section-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.4px; }
 
@@ -332,6 +333,10 @@
           <div class="stat-card">
             <div class="stat-label">Invoices Sent</div>
             <div class="stat-value blue" id="statSent">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Overdue</div>
+            <div class="stat-value red" id="statOverdue">0</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Paid this month</div>
@@ -614,6 +619,7 @@ function renderDashboard() {
   document.getElementById('statRevenue').textContent = money(sym, revenue);
   document.getElementById('statOutstanding').textContent = money(sym, outAmt);
   document.getElementById('statSent').textContent = outstanding.length;
+  document.getElementById('statOverdue').textContent = invoices.filter(i => effectiveStatus(i) === 'overdue').length;
   document.getElementById('statPaid').textContent = thisMonth.length;
 
   const recent = [...invoices].sort((a,b) => new Date(b.updatedAt||0) - new Date(a.updatedAt||0)).slice(0,5);
