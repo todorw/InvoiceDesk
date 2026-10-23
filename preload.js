@@ -4,4 +4,5 @@ contextBridge.exposeInMainWorld('api', {
   loadInvoices: () => ipcRenderer.invoke('load-invoices'),
   saveInvoices: (data) => ipcRenderer.invoke('save-invoices', data),
   exportPdf: (invoiceId, html) => ipcRenderer.invoke('export-pdf', invoiceId, html),
+  exportBackup: (data) => ipcRenderer.invoke('export-backup', data),
 });

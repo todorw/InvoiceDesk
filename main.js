@@ -73,6 +73,22 @@ ipcMain.handle('save-invoices', (_, data) => {
   }
 });
 
+// ── IPC: Backup all invoices to a json file ───────────────────────────────
+ipcMain.handle('export-backup', async (_, data) => {
+  const stamp = new Date().toISOString().slice(0, 10);
+  const { filePath } = await dialog.showSaveDialog(mainWindow, {
+    defaultPath: `invoicedesk-backup-${stamp}.json`,
+    filters: [{ name: 'JSON', extensions: ['json'] }],
+  });
+  if (!filePath) return { ok: false };
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+    return { ok: true, path: filePath };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+});
+
 // ── IPC: Export PDF via Chromium print ─────────────────────────────────────
 ipcMain.handle('export-pdf', async (_, invoiceId, html) => {
   const { filePath } = await dialog.showSaveDialog(mainWindow, {
