@@ -107,7 +107,9 @@
 
   /* ── Views ── */
   .view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
-  .view.active { display: flex; }
+  .view.active { display: flex; animation: viewIn 0.22s var(--ease); }
+  @keyframes viewIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
   /* ── Dashboard ── */
   .dash-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); background: var(--surface); }
