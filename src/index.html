@@ -688,9 +688,11 @@ function newInvoice() {
   currentId = genId();
   currentItems = [{ desc: '', qty: 1, rate: 0 }];
 
-  document.getElementById('fFromName').value = '';
-  document.getElementById('fFromEmail').value = '';
-  document.getElementById('fFromAddr').value = '';
+  // reuse sender details from the last saved invoice
+  const last = [...invoices].sort((a,b) => new Date(b.updatedAt||0) - new Date(a.updatedAt||0))[0];
+  document.getElementById('fFromName').value = last?.fromName || '';
+  document.getElementById('fFromEmail').value = last?.fromEmail || '';
+  document.getElementById('fFromAddr').value = last?.fromAddr || '';
   document.getElementById('fToName').value = '';
   document.getElementById('fToEmail').value = '';
   document.getElementById('fToAddr').value = '';
