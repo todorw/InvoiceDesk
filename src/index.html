@@ -800,8 +800,8 @@ function renderItems() {
   document.getElementById('itemsBody').innerHTML = currentItems.map((item, i) => `
     <tr>
       <td><input value="${escHtml(item.desc)}" placeholder="Description" oninput="currentItems[${i}].desc=this.value;renderPreview()"></td>
-      <td><input type="number" value="${item.qty}" min="0" step="1" oninput="currentItems[${i}].qty=parseFloat(this.value)||0;renderTotals();renderPreview()"></td>
-      <td><input type="number" value="${item.rate}" min="0" step="0.01" oninput="currentItems[${i}].rate=parseFloat(this.value)||0;renderTotals();renderPreview()"></td>
+      <td><input type="number" value="${item.qty}" min="0" step="1" oninput="currentItems[${i}].qty=Math.max(0,parseFloat(this.value)||0);renderTotals();renderPreview()"></td>
+      <td><input type="number" value="${item.rate}" min="0" step="0.01" oninput="currentItems[${i}].rate=Math.max(0,parseFloat(this.value)||0);renderTotals();renderPreview()"></td>
       <td class="total-cell">${money(currency(), item.qty * item.rate)}</td>
       <td style="text-align:center"><button class="del-btn" onclick="removeItem(${i})">×</button></td>
     </tr>`).join('');
