@@ -413,7 +413,7 @@
             <div class="field-row">
               <div class="field"><label>Invoice number</label><input id="fInvNum" oninput="document.getElementById('editorTitle').textContent=this.value||'Invoice';renderPreview()"></div>
               <div class="field"><label>Currency</label>
-                <select id="fCurrency" onchange="renderPreview()">
+                <select id="fCurrency" onchange="renderTotals();renderPreview()">
                   <option value="$">USD ($)</option>
                   <option value="€">EUR (€)</option>
                   <option value="£">GBP (£)</option>
