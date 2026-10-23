@@ -217,6 +217,8 @@
   .editor-body { flex: 1; overflow-y: auto; display: flex; gap: 0; }
   .editor-form { flex: 1; padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; max-width: 680px; }
   .editor-preview-panel { width: 360px; min-width: 340px; padding: 20px 16px; background: var(--bg); border-left: 1px solid var(--border); }
+  .editor-preview-panel > * { position: sticky; top: 0; }
+  .editor-preview-panel .invoice-preview { top: 28px; }
 
   .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; box-shadow: var(--shadow-sm); transition: border-color 0.2s; }
   .form-card:focus-within { border-color: var(--border2); }
