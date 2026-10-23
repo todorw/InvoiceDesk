@@ -358,7 +358,7 @@
     <!-- Dashboard view -->
     <div class="view active" id="view-dashboard">
       <div class="dash-header">
-        <h1>Dashboard</h1>
+        <h1 id="dashGreeting">Dashboard</h1>
         <p id="dashDate">Loading...</p>
       </div>
       <div class="dash-content">
@@ -656,6 +656,8 @@ function backToList() {
 // Dashboard
 // ─────────────────────────────────────────
 function renderDashboard() {
+  const h = new Date().getHours();
+  document.getElementById('dashGreeting').textContent = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
   document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
   const paid = invoices.filter(i => i.status === 'paid');
