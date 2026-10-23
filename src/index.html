@@ -501,6 +501,7 @@ let listFilter = 'all';
 let pendingDeleteId = null;
 
 const fmt = d => new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+const money = (sym, n) => sym + (Number(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const today = () => new Date().toISOString().split('T')[0];
 const dueDefault = () => { const d = new Date(); d.setDate(d.getDate()+14); return d.toISOString().split('T')[0]; };
 const currency = () => document.getElementById('fCurrency')?.value || '$';
@@ -590,8 +591,8 @@ function renderDashboard() {
   const outAmt = outstanding.reduce((s,i) => s + (i.total || 0), 0);
   const sym = paid.length > 0 ? (paid[0].currency || '$') : '$';
 
-  document.getElementById('statRevenue').textContent = sym + revenue.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2});
-  document.getElementById('statOutstanding').textContent = sym + outAmt.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('statRevenue').textContent = money(sym, revenue);
+  document.getElementById('statOutstanding').textContent = money(sym, outAmt);
   document.getElementById('statSent').textContent = outstanding.length;
   document.getElementById('statPaid').textContent = thisMonth.length;
 
@@ -602,7 +603,7 @@ function renderDashboard() {
       ${recent.map(inv => `<tr onclick="editInvoice('${escHtml(inv.id)}')">
         <td style="font-weight:600">${escHtml(inv.number)}</td>
         <td>${escHtml(inv.toName)||'—'}</td>
-        <td>${inv.currency||'$'}${(inv.total||0).toFixed(2)}</td>
+        <td>${money(inv.currency||'$', inv.total||0)}</td>
         <td><span class="status-pill status-${inv.status}">${inv.status}</span></td>
       </tr>`).join('')}
     </tbody></table>`;
@@ -640,7 +641,7 @@ function renderList() {
         <td>${escHtml(inv.toName)||'—'}</td>
         <td>${inv.issueDate ? fmt(inv.issueDate) : '—'}</td>
         <td>${inv.dueDate ? fmt(inv.dueDate) : '—'}</td>
-        <td style="font-weight:600">${inv.currency||'$'}${(inv.total||0).toFixed(2)}</td>
+        <td style="font-weight:600">${money(inv.currency||'$', inv.total||0)}</td>
         <td><span class="status-pill status-${inv.status}">${inv.status}</span></td>
       </tr>`).join('');
   }
@@ -791,7 +792,7 @@ function renderItems() {
       <td><input value="${escHtml(item.desc)}" placeholder="Description" oninput="currentItems[${i}].desc=this.value;renderPreview()"></td>
       <td><input type="number" value="${item.qty}" min="0" step="1" oninput="currentItems[${i}].qty=parseFloat(this.value)||0;renderTotals();renderPreview()"></td>
       <td><input type="number" value="${item.rate}" min="0" step="0.01" oninput="currentItems[${i}].rate=parseFloat(this.value)||0;renderTotals();renderPreview()"></td>
-      <td class="total-cell">${currency()}${(item.qty * item.rate).toFixed(2)}</td>
+      <td class="total-cell">${money(currency(), item.qty * item.rate)}</td>
       <td style="text-align:center"><button class="del-btn" onclick="removeItem(${i})">×</button></td>
     </tr>`).join('');
 }
@@ -805,14 +806,14 @@ function renderTotals() {
   // Also update row totals
   document.querySelectorAll('#itemsBody tr').forEach((row, i) => {
     const cell = row.querySelector('.total-cell');
-    if (cell) cell.textContent = c + (currentItems[i].qty * currentItems[i].rate).toFixed(2);
+    if (cell) cell.textContent = money(c, currentItems[i].qty * currentItems[i].rate);
   });
 
   document.getElementById('totalsBlock').innerHTML = `
-    <div class="total-row"><span>Subtotal</span><span>${c}${subtotal.toFixed(2)}</span></div>
-    ${disc > 0 ? `<div class="total-row" style="color:var(--accent)"><span>Discount (${disc}%)</span><span>−${c}${discountAmt.toFixed(2)}</span></div>` : ''}
-    ${tax > 0 ? `<div class="total-row"><span>Tax (${tax}%)</span><span>${c}${taxAmt.toFixed(2)}</span></div>` : ''}
-    <div class="total-row total-grand"><span>Total</span><span>${c}${total.toFixed(2)}</span></div>
+    <div class="total-row"><span>Subtotal</span><span>${money(c, subtotal)}</span></div>
+    ${disc > 0 ? `<div class="total-row" style="color:var(--accent)"><span>Discount (${disc}%)</span><span>−${money(c, discountAmt)}</span></div>` : ''}
+    ${tax > 0 ? `<div class="total-row"><span>Tax (${tax}%)</span><span>${money(c, taxAmt)}</span></div>` : ''}
+    <div class="total-row total-grand"><span>Total</span><span>${money(c, total)}</span></div>
   `;
 }
 
@@ -840,8 +841,8 @@ function renderPreview() {
     <tr>
       <td>${escHtml(it.desc) || '—'}</td>
       <td>${it.qty}</td>
-      <td>${c}${it.rate.toFixed(2)}</td>
-      <td>${c}${(it.qty * it.rate).toFixed(2)}</td>
+      <td>${money(c, it.rate)}</td>
+      <td>${money(c, it.qty * it.rate)}</td>
     </tr>`).join('');
 
   document.getElementById('invoicePreview').innerHTML = `
@@ -874,10 +875,10 @@ function renderPreview() {
       <tbody>${rows}</tbody>
     </table>
     <div class="p-totals">
-      <div class="p-total-row"><span>Subtotal</span><span>${c}${subtotal.toFixed(2)}</span></div>
-      ${disc > 0 ? `<div class="p-total-row" style="color:#1D9E75"><span>Discount (${disc}%)</span><span>−${c}${discountAmt.toFixed(2)}</span></div>` : ''}
-      ${tax > 0 ? `<div class="p-total-row"><span>Tax (${tax}%)</span><span>${c}${taxAmt.toFixed(2)}</span></div>` : ''}
-      <div class="p-total-row p-total-grand"><span>Total due</span><span>${c}${total.toFixed(2)}</span></div>
+      <div class="p-total-row"><span>Subtotal</span><span>${money(c, subtotal)}</span></div>
+      ${disc > 0 ? `<div class="p-total-row" style="color:#1D9E75"><span>Discount (${disc}%)</span><span>−${money(c, discountAmt)}</span></div>` : ''}
+      ${tax > 0 ? `<div class="p-total-row"><span>Tax (${tax}%)</span><span>${money(c, taxAmt)}</span></div>` : ''}
+      <div class="p-total-row p-total-grand"><span>Total due</span><span>${money(c, total)}</span></div>
     </div>
     ${notes ? `<div class="p-notes">${escHtml(notes)}</div>` : ''}
   `;
@@ -947,7 +948,7 @@ function renderClients() {
           <div style="font-size:12px;color:var(--text2)">${escHtml(c.email||'')} · ${c.invoices.length} invoice${c.invoices.length!==1?'s':''}</div>
         </div>
         <div style="text-align:right">
-          <div style="font-weight:700;font-size:15px;color:var(--accent)">${c.currency}${c.total.toFixed(2)}</div>
+          <div style="font-weight:700;font-size:15px;color:var(--accent)">${money(c.currency, c.total)}</div>
           <div style="font-size:11px;color:var(--text3)">lifetime</div>
         </div>
       </div>`).join('');
