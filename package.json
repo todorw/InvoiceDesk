@@ -1,9 +1,9 @@
 {
   "name": "invoicedesk",
   "version": "1.0.0",
-  "description": "Simple, beautiful invoice & quote generator for freelancers",
+  "description": "Simple, offline invoice generator for freelancers",
   "main": "main.js",
-  "author": "Your Name",
+  "author": "Vuk Todorovic",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
