@@ -36,6 +36,32 @@
     --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
   }
 
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141413;
+      --surface: #1c1c1a;
+      --surface2: #262624;
+      --border: #2e2e2b;
+      --border2: #3d3d39;
+      --text: #ecebe6;
+      --text2: #a8a69e;
+      --text3: #75736c;
+      --accent-light: #12352b;
+      --accent-text: #6fd8b2;
+      --danger-light: #3a1c1c;
+      --blue-light: #142a40;
+      --blue-text: #8cc2f2;
+      --amber-light: #3a2b12;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 6px 18px rgba(0,0,0,0.4);
+      color-scheme: dark;
+    }
+    .status-draft { background: var(--surface2) !important; color: var(--text2) !important; }
+    .status-overdue { color: #f19999 !important; }
+    .toast { background: #ecebe6; color: #1a1917; }
+    .invoice-preview { border-color: transparent; }
+  }
+
   body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
 
   /* ── App shell ── */
