@@ -208,6 +208,10 @@
   .inv-table { width: 100%; border-collapse: collapse; }
   .inv-table th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; }
   .inv-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .inv-table th.sortable { cursor: pointer; user-select: none; }
+  .inv-table th.sortable:hover { color: var(--text2); }
+  .inv-table th[data-dir="asc"]::after { content: ' ↑'; color: var(--accent); }
+  .inv-table th[data-dir="desc"]::after { content: ' ↓'; color: var(--accent); }
   .inv-table tbody tr { transition: background 0.12s; }
   .inv-table tbody tr:hover td { background: var(--surface2); cursor: pointer; }
   .inv-table tbody tr:hover td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
@@ -446,7 +450,7 @@
       <div class="inv-table-wrap">
         <table class="inv-table">
           <thead><tr>
-            <th>Invoice #</th><th>Client</th><th>Issue Date</th><th>Due Date</th><th>Amount</th><th>Status</th>
+            <th class="sortable" data-sort="number">Invoice #</th><th class="sortable" data-sort="toName">Client</th><th class="sortable" data-sort="issueDate">Issue Date</th><th class="sortable" data-sort="dueDate">Due Date</th><th class="sortable" data-sort="total">Amount</th><th>Status</th>
           </tr></thead>
           <tbody id="invoiceListBody"></tbody>
         </table>
@@ -595,6 +599,7 @@ let currentItems = [];
 let listFilter = 'all';
 let pendingDeleteId = null;
 let dirty = false;
+let listSort = { key: null, dir: 1 };
 
 const fmt = d => new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 const money = (sym, n) => sym + (Number(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -748,7 +753,16 @@ function renderList() {
     const matchFilter = listFilter === 'all' || effectiveStatus(i) === listFilter;
     const matchSearch = !q || [i.number, i.toName, i.toEmail].some(f => f?.toLowerCase().includes(q));
     return matchFilter && matchSearch;
-  }).sort((a,b) => new Date(b.updatedAt||0) - new Date(a.updatedAt||0));
+  }).sort((a,b) => {
+    if (!listSort.key) return new Date(b.updatedAt||0) - new Date(a.updatedAt||0);
+    const x = a[listSort.key] ?? '', y = b[listSort.key] ?? '';
+    const cmp = typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y));
+    return listSort.dir * cmp;
+  });
+
+  document.querySelectorAll('.inv-table th.sortable').forEach(th => {
+    th.dataset.dir = th.dataset.sort === listSort.key ? (listSort.dir > 0 ? 'asc' : 'desc') : '';
+  });
 
   const tbody = document.getElementById('invoiceListBody');
   const empty = document.getElementById('emptyState');
@@ -1134,6 +1148,15 @@ function toast(msg, type = '') {
 // Init
 // ─────────────────────────────────────────
 document.getElementById('view-editor').addEventListener('input', () => setDirty(true));
+
+// click a column header to sort, click again to flip, third time resets
+document.querySelectorAll('.inv-table th.sortable').forEach(th => th.addEventListener('click', () => {
+  const key = th.dataset.sort;
+  if (listSort.key !== key) listSort = { key, dir: 1 };
+  else if (listSort.dir === 1) listSort.dir = -1;
+  else listSort = { key: null, dir: 1 };
+  renderList();
+}));
 
 // enter on the last line item adds a new one
 document.getElementById('itemsBody').addEventListener('keydown', e => {
