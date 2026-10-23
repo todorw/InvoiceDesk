@@ -1038,6 +1038,29 @@ function toast(msg, type = '') {
 // ─────────────────────────────────────────
 document.getElementById('view-editor').addEventListener('input', () => setDirty(true));
 
+// ─────────────────────────────────────────
+// Keyboard shortcuts
+// ─────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  const mod = e.ctrlKey || e.metaKey;
+  const inEditor = document.getElementById('view-editor').classList.contains('active');
+  const key = e.key.toLowerCase();
+
+  if (e.key === 'Escape') {
+    if (document.getElementById('deleteModal').classList.contains('show')) closeModal();
+    else if (inEditor) backToList();
+    return;
+  }
+  if (!mod) return;
+  if (key === 's' && inEditor) { e.preventDefault(); saveInvoice(); }
+  else if (key === 'n') { e.preventDefault(); newInvoice(); }
+  else if (key === 'p' && inEditor) { e.preventDefault(); exportPdf(); }
+  else if (key === 'f') {
+    e.preventDefault();
+    if (showView('invoices')) document.getElementById('searchInput').focus();
+  }
+});
+
 loadData();
 </script>
 </body>
